@@ -1,10 +1,38 @@
-import { NEW_MESSAGE, SET_USERNAME } from './types';
+import { NEW_MESSAGE, SET_USERNAME, REACTION_OBJECTS } from './types';
 
-export const initialState = { messages: [], username:'anonymous' }
+export const initialState = { 
+    messages: [], 
+    username:'anonymous', 
+    reactionsMap:{} 
+};
+
+const REACTION_TYPES = REACTION_OBJECTS.map(
+    REACTION_OBJECT => REACTION_OBJECT.type
+);
 
 const reducer = (state, action) =>{
 
     Object.freeze(state)
+
+    if (REACTION_TYPES.includes(action.type)){
+        let reactionsMap;
+        const { messageId } = action.item;
+        const messageReactions = state.reactionsMap[messageId]
+
+        if (messageReactions){
+            reactionsMap = {
+                ...state.reactionsMap,
+                [messageId]: [...messageReactions, action.item]
+            }
+        }else{
+            reactionsMap = {
+                ...state.reactionsMap,
+                [messageId]: [action.item]
+            }
+        }
+
+        return {...state, reactionsMap}
+    }
 
     switch (action.type) {
         case NEW_MESSAGE:
