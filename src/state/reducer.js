@@ -1,6 +1,6 @@
-import { NEW_MESSAGE } from './types';
+import { NEW_MESSAGE, SET_USERNAME } from './types';
 
-export const initialState = { messages: [] }
+export const initialState = { messages: [], username:'anonymous' }
 
 const reducer = (state, action) =>{
 
@@ -13,6 +13,11 @@ const reducer = (state, action) =>{
                 messages:[...state.messages, action.item]
             };
     
+        case SET_USERNAME:
+            return {
+                ...state, 
+                username: action.username
+            }  
         default:
             return state;
     }
